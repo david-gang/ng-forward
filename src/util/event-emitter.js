@@ -1,14 +1,13 @@
 /* global setTimeout */
 // # EventEmitter class
-// Simple re-implementation of Angular 2's [EventEmitter](https://github.com/angular/angular/blob/master/modules/angular2/src/facade/async.ts#L97)
-import {Subject} from 'rx-lite';
+// Simple re-implementation of Angular 2's [EventEmitter](https://github.com/angular/angular/blob/master/modules/angular2/src/core/facade/async.ts#L137)
+import Subject from '@reactivex/rxjs/dist/cjs/Subject';
 
 export class EventEmitter{
   _subject = new Subject();
 
   observer(generator){
-    return this._subject
-      .subscribe(
+    return this._subject.subscribe(
         value => setTimeout(() => generator.next(value)),
         error => generator.throw ? generator.throw(error) : null,
         () => generator.return ? generator.return() : null
@@ -20,14 +19,14 @@ export class EventEmitter{
   }
 
   next(value){
-    this._subject.onNext(value);
+    this._subject.next(value);
   }
 
   throw(error){
-    this._subject.onError(error);
+    this._subject.error(error);
   }
 
   return(){
-    this._subject.onCompleted();
+    this._subject.complete();
   }
 }
