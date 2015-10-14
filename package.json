@@ -10,7 +10,7 @@
   "scripts": {
     "test": "gulp test",
     "prepublish": "gulp test",
-    "bundle": "browserify -t [ babelify --stage 0 ] ./src/index.js --standalone ng-forward -i reflect-metadata | derequire > ./ng-forward.js"
+    "bundle": "browserify -t [ babelify --stage 0 ] ./src/index.js --standalone ng-forward -i reflect-metadata | derequire | uglifyjs > ./ng-forward.js"
   },
   "keywords": [
     "angular",
