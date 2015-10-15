@@ -3,7 +3,7 @@
 
 // ## Setup
 // All information about traversing a provider is written by the appWriter
-import {appWriter} from './writers';
+import {appWriter, providerWriter} from './writers';
 // The bundle is going to be generating a Module, so we'll need this
 import Module from './module';
 // Events is a utility for generating semi-dynamic events. It will be generating
@@ -12,6 +12,8 @@ import events from './util/events';
 // Takes an array of bindings and separates it into decorated classes and string
 // names. Usually these string names are the names of angular modules.
 import filterBindings from './util/filter-bindings';
+
+import eventDispatcher from "./util/event-dispatcher.js";
 
 // ## Bundle
 // The bundle function. Pass it the name of the module you want to generate, the root
@@ -41,7 +43,7 @@ export default function bundle(moduleName, provider, bindings = []){
   // Recursive parsing function. Takes a provider and adds modules to the modules
   // set. Then traverses the providers it depends on.
   function parseProvider(provider){
-    // Check to see if the provider is defined and hasn't been traversed already 
+    // Check to see if the provider is defined and hasn't been traversed already
     if( provider && !providers.has(provider) ){
       // Add the provider to the providers set
       providers.add(provider);
@@ -55,9 +57,13 @@ export default function bundle(moduleName, provider, bindings = []){
   // Take the array of starting providers and begin the traversal
   startingProviders.forEach(parseProvider);
 
+
+  let eventDispatchingService = eventDispatcher.resolve()
+
   // Create our Module and add all of the providers we found during traversal
   return Module(moduleName, [...modules.values()]).add(
     ...events.resolve(),
-    ...providers.values()
-  );
+    ...providers.values(),
+    eventDispatchingService
+  ).run([providerWriter.get('name', eventDispatchingService), function (eventDispatcher) {}]);
 }
