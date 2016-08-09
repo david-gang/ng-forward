@@ -1,7 +1,6 @@
 import {bundleStore} from '../writers'
 import {dashToCamel} from './helpers';
 import {getInjectableName} from './get-injectable-name';
-import JQuery from "./";
 import IAugmentedJQuery = angular.IAugmentedJQuery;
 import IAugmentedJQueryStatic = angular.IAugmentedJQueryStatic;
 import {ngClass} from "../testing/test-component-builder";

@@ -68,6 +68,7 @@ function buildCJSDist(){
 		.pipe(gulp.dest('./dist/cjs'));
 
 	let move = gulp.src('./dist/es6/**/*.d.ts')
+		.pipe(replace('rxjs-es', 'rxjs'))
 		.pipe(gulp.dest('./dist/cjs'));
 
 	return merge([ transpile, move ]);
